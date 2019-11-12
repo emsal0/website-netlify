@@ -1,0 +1,62 @@
+baseurl = ""
+title = "emsal"
+theme = "whiteplain"
+languageCode = "en"
+# google analytics tracking id
+# googleAnalytics = "Toracking ID"
+
+# Copyright notice. This is displayer in the footer.
+# copyright = "&copy; Copyright 2017 Your name"
+
+[params]
+  # whether to use CDN or local file for fontawesome
+  #useCDN = false
+  # whether to include external sharing scripts and icons for twitter, facebook and co.
+  #showShareIcons = false
+  # Date format
+  #dateFormat = "January 2, 2006"
+
+# This is displayer in About page.
+[params.author]
+  name = "emsal"
+  # Gravatar or Abatar image
+  gravatar = "emsal1863@gmail.com"
+  #avatar = "/path/to/avatar"
+
+  twitter = "emsal1863"
+  github = "emsal1863"
+  email = "emsal1863@gmail.com"
+
+[taxonomies]
+  category = "categories"
+  tag = "tags"
+  series = "series"
+
+# Header Menu
+[[menu.main]]
+  name = "Categories"
+  identifier = "categories"
+  url = "/categories/"
+  weight = 1
+[[menu.main]]
+  name = "Tags"
+  identifier = "tags"
+  url = "/tags/"
+  weight = 2
+[[menu.main]]
+  name = "Archives"
+  identifier = "archives"
+  url = "/archives/"
+  weight = 3
+[[menu.main]]
+  name = "About"
+  identifier = "about"
+  url = "/about/"
+  weight = 4
+
+# Footer Menu
+[[menu.footer]]
+  name = "About"
+  weight = 1
+  identifier = "about"
+  url = "/about/"
