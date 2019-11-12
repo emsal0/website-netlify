@@ -2,6 +2,8 @@
 title: "CockroachDB internship project: Speeding up some interleaved table deletes by a factor of 10 billion"
 date: 2018-11-16T04:49:15-08:00
 draft: false
+aliases:
+    - /blog/5
 ---
 
 <p>Last summer, I did an internship with <a href="https://www.cockroachlabs.com">Cockroach Labs</a>, makers of <a href="https://www.github.com/cockroachdb/cockroach">CockroachDB</a>, a SQL database built for massive distribution. I was working on the SQL language semantics in Cockroach, and I was able to work on many different facets of the project in that area.</p>

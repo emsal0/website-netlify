@@ -2,6 +2,8 @@
 title: "Destroying Cockroaches and the Hackathon Experience"
 date: 2017-03-01T17:58:11-08:00
 draft: false
+aliases:
+    - /blog/2
 ---
 
 <p>On the weekend of March 18th-19th I and a few of my fellow UBC students Gareth Ellis, Alexander Hoar, and Jeffrey Doyle worked together (and lost a ton of sleep) for the hackathon <a href="https://nwhacks.io">nwHacks 2017</a>. One of the new and more prominent sponsors of the event was <a href="https://www.cockroachlabs.com/">Cockroach Labs</a>, creators of the distributed database <a href="https://github.com/cockroachdb/cockroach">CockroachDB</a>, and we thought it'd be fun to work on a project involving CockroachDB and shoot for the &quot;Best Use of CockroachDB&quot; sub-contest they were running (and giving out a nice cash prize!).</p>

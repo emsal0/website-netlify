@@ -2,6 +2,8 @@
 title: "Implemented RSS!"
 date: 2017-05-03T04:55:06-08:00
 draft: false
+aliases:
+    - /blog/3
 ---
 
 <font color="red">
