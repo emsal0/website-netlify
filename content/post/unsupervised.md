@@ -1,7 +1,7 @@
 ---
 title: "Trying to organize my Twitter timeline, using unsupervised learning"
 date: 2017-11-15T05:45:31-08:00
-draft: true
+draft: false
 ---
 
 <p>I'm a frequent user of Twitter, but I realize that among the major social networks it could be the hardest to get into. One of the big obstacles for me was that, as I followed more and more people representing my different interests, my timeline became an overcrowded mess with too many different types of content. For example, at one point I started following many tech-related accounts and comic book art-related accounts at the same time, and when I would go on Twitter I could never reasonably choose to consume content from only one of the groups.</p>
