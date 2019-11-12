@@ -19,10 +19,7 @@ languageCode = "en"
 # This is displayer in About page.
 [params.author]
   name = "emsal"
-  # Gravatar or Abatar image
   gravatar = "emsal1863@gmail.com"
-  #avatar = "/path/to/avatar"
-
   twitter = "emsal1863"
   github = "emsal1863"
   email = "emsal1863@gmail.com"
