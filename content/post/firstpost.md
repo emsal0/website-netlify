@@ -1,6 +1,6 @@
 ---
 title: "First post!"
-date: 2017-02-27T17:17:13:19-08:00
+date: 2017-02-27T17:17:13-08:00
 draft: false
 ---
 
