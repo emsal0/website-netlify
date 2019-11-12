@@ -34,51 +34,50 @@ aliases:
 <h2 id="collecting-the-data">Collecting the data</h2>
 <p>Now that I've decided on a representation for every twitter account in my follow list, I need to collect the data necessary to fill up the matrix with all of the edges present in our follow graph. The way that I originally was thinking of doing it was via the Twitter API, which would probably have been the most straightforward way to do it. However, Twitter heavily rate limits doing this: if you want to get a user's follow list, then you can only do so <a href="https://developer.twitter.com/en/docs/basics/rate-limits.html">15 times every 15 minutes</a> (look at the <code>GET friends/list</code> row), which is pretty unwieldy to work with.</p>
 <p>To work around this, I wrote a selenium script in python that would go through a user's follow list just by going to the <code>/{user}/following</code> endpoint and collect the names of the accounts that they follow just from the HTML. Here's the relevant function:</p>
-<!-- HTML generated using hilite.me -->
-<div style="background: #f8f8f8; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;">
-<pre style="margin: 0; line-height: 125%"><span style="color: #008000; font-weight: bold">def</span> <span style="color: #0000FF">get_follow_list</span>(username, your_username, password):
-    browser <span style="color: #666666">=</span> webdriver<span style="color: #666666">.</span>Firefox()
 
-    browser<span style="color: #666666">.</span>get(<span style="color: #BA2121">&quot;https://twitter.com/{username}/following&quot;</span><span style="color: #666666">.</span>format(<span style="color: #666666">**</span>{<span style="color: #BA2121">&#39;username&#39;</span> : username}))
+{{< highlight python >}}
+def get_follow_list(username, your_username, password):
+    browser = webdriver.Firefox()
 
-    username_field <span style="color: #666666">=</span> browser<span style="color: #666666">.</span>find_element_by_class_name(<span style="color: #BA2121">&quot;js-username-field&quot;</span>)
-    password_field <span style="color: #666666">=</span> browser<span style="color: #666666">.</span>find_element_by_class_name(<span style="color: #BA2121">&quot;js-password-field&quot;</span>)
+    browser.get("https://twitter.com/{username}/following".format(**{'username' : username}))
 
-    username_field<span style="color: #666666">.</span>send_keys(your_username)
-    password_field<span style="color: #666666">.</span>send_keys(password)
+    username_field = browser.find_element_by_class_name("js-username-field")
+    password_field = browser.find_element_by_class_name("js-password-field")
 
-    ui<span style="color: #666666">.</span>WebDriverWait(browser, <span style="color: #666666">5</span>)
-    password_field<span style="color: #666666">.</span>send_keys(Keys<span style="color: #666666">.</span>RETURN)
+    username_field.send_keys(your_username)
+    password_field.send_keys(password)
 
-    <span style="color: #008000; font-weight: bold">try</span>:
-        ui<span style="color: #666666">.</span>WebDriverWait(browser, <span style="color: #666666">10</span>)<span style="color: #666666">.</span>until(EC<span style="color: #666666">.</span>presence_of_element_located((By<span style="color: #666666">.</span>CLASS_NAME, <span style="color: #BA2121">&quot;ProfileCard&quot;</span>)))
-    <span style="color: #008000; font-weight: bold">except</span>:
-        <span style="color: #008000; font-weight: bold">return</span> []
+    ui.WebDriverWait(browser, 5)
+    password_field.send_keys(Keys.RETURN)
+
+    try:
+        ui.WebDriverWait(browser, 10).until(EC.presence_of_element_located((By.CLASS_NAME, "ProfileCard")))
+    except:
+        return []
 
 
-    last_height <span style="color: #666666">=</span> browser<span style="color: #666666">.</span>execute_script(<span style="color: #BA2121">&quot;return document.body.scrollHeight;&quot;</span>)
-    num_cards <span style="color: #666666">=</span> <span style="color: #008000">len</span>(browser<span style="color: #666666">.</span>find_elements_by_class_name(<span style="color: #BA2121">&quot;ProfileCard&quot;</span>))
-    <span style="color: #008000; font-weight: bold">while</span> <span style="color: #008000">True</span>:
-        browser<span style="color: #666666">.</span>execute_script(<span style="color: #BA2121">&quot;window.scrollTo(0, document.body.scrollHeight)&quot;</span>);
+    last_height = browser.execute_script("return document.body.scrollHeight;")
+    num_cards = len(browser.find_elements_by_class_name("ProfileCard"))
+    while True:
+        browser.execute_script("window.scrollTo(0, document.body.scrollHeight)");
 
-        <span style="color: #008000; font-weight: bold">try</span>:
-            new_height <span style="color: #666666">=</span> ui<span style="color: #666666">.</span>WebDriverWait(browser, <span style="color: #666666">1.5</span>)<span style="color: #666666">.</span>until(new_height_reached(last_height))
-            last_height <span style="color: #666666">=</span> new_height
-        <span style="color: #008000; font-weight: bold">except</span>:
-            <span style="color: #408080; font-style: italic"># print(sys.exc_info())</span>
-            <span style="color: #008000; font-weight: bold">break</span>
+        try:
+            new_height = ui.WebDriverWait(browser, 1.5).until(new_height_reached(last_height))
+            last_height = new_height
+        except:
+            # print(sys.exc_info())
+            break
 
-    <span style="color: #008000; font-weight: bold">print</span>(<span style="color: #BA2121">&quot;Loop exited; follow list extracted&quot;</span>)
+    print("Loop exited; follow list extracted")
 
-    ret <span style="color: #666666">=</span> browser<span style="color: #666666">.</span>execute_script(<span style="color: #BA2121">&quot;return document.documentElement.innerHTML;&quot;</span>)
-    browser<span style="color: #666666">.</span>close()
-    soup <span style="color: #666666">=</span> BeautifulSoup(ret, <span style="color: #BA2121">&#39;html.parser&#39;</span>)
-    cards <span style="color: #666666">=</span> soup<span style="color: #666666">.</span>findAll(<span style="color: #BA2121">&quot;div&quot;</span>, {<span style="color: #BA2121">&quot;class&quot;</span>: <span style="color: #BA2121">&quot;ProfileCard&quot;</span>})
-    screennames <span style="color: #666666">=</span> [card<span style="color: #666666">.</span>get(<span style="color: #BA2121">&quot;data-screen-name&quot;</span>) <span style="color: #008000; font-weight: bold">for</span> card <span style="color: #AA22FF; font-weight: bold">in</span> cards]
+    ret = browser.execute_script("return document.documentElement.innerHTML;")
+    browser.close()
+    soup = BeautifulSoup(ret, 'html.parser')
+    cards = soup.findAll("div", {"class": "ProfileCard"})
+    screennames = [card.get("data-screen-name") for card in cards]
 
-    <span style="color: #008000; font-weight: bold">return</span> screennames
-</pre>
-</div>
+    return screennames
+{{< / highlight >}}
 <p>And here's a video of it in action:</p>
 <iframe width="560" height="315" src="https://www.youtube.com/embed/K5r3ZQRzd3M" frameborder="0" gesture="media" allowfullscreen>
 </iframe>
@@ -113,22 +112,22 @@ mutable struct FollowedAccount
 </div>
 <p>So, in <code>followed</code>, we now have a dictionary where we can find all the users following a particular account. We construct the data matrix by first initializing an <span class="math inline">\(n \times m\)</span> matrix of <span class="math inline">\(0\)</span>s and filling the cell in the <span class="math inline">\(i\)</span>th row and the <span class="math inline">\(j\)</span>th column with a <span class="math inline">\(1\)</span> if account of interest <span class="math inline">\(i\)</span> follows account-to-examine <span class="math inline">\(j\)</span>.</p>
 <!-- HTML generated using hilite.me -->
-<div style="background: #f8f8f8; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;">
-<pre style="margin: 0; line-height: 125%">(dim,) <span style="color: #666666">=</span> size(allAccounts)
-(n,) <span style="color: #666666">=</span> size(accountsOfInterest)
+{{< highlight julia >}}
+(dim,) = size(followingToCheck)
 
-dataPoints <span style="color: #666666">=</span> zeros(n,dim)
+(n,) = size(usernamesFiltered)
+dataPoints = zeros(n,dim)
 
-<span style="color: #008000; font-weight: bold">for</span> (usernameIdx, username) <span style="color: #008000; font-weight: bold">in</span> enumerate(accountsOfInterest)
+for (usernameIdx, username) in enumerate(usernamesFiltered)
 
-    <span style="color: #008000; font-weight: bold">for</span> (followedIdx, followedAcc) <span style="color: #008000; font-weight: bold">in</span> enumerate(allAccounts)
-        <span style="color: #008000; font-weight: bold">if</span> <span style="color: #008000; font-weight: bold">in</span>(username, followed[followedAcc]<span style="color: #666666">.</span>following)
-            dataPoints[usernameIdx, followedIdx] <span style="color: #666666">=</span> <span style="color: #666666">1</span>
-        <span style="color: #008000; font-weight: bold">end</span>
-    <span style="color: #008000; font-weight: bold">end</span>
-<span style="color: #008000; font-weight: bold">end</span>
-</pre>
-</div>
+    for (followedIdx, followedAcc) in enumerate(followingToCheck)
+        if in(username, followed[followedAcc].following)
+            dataPoints[usernameIdx, followedIdx] = 1
+        end
+    end
+end
+{{< / highlight >}}
+
 <p>(Note: some variable names have been changed for easier reading in this post)</p>
 <h2 id="what-the-cluster">What the cluster?</h2>
 <p>Clustering algorithms are a form of unsupervised learning, meaning that there's no single &quot;right answer&quot; that they need to try to guess at. Clustering algorithms take data in the form of a bunch of points and partitions them into some distinct groups. In general (in all clustering algorithms I've seen so far), &quot;closer&quot; points are commonly grouped together, while points that are further apart tend to go in different clusters.</p>
