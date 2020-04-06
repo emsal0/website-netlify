@@ -1,7 +1,7 @@
 ---
-title: "Quarantine Logs 2020-04-05"
+title: "Quarantine Logs 2020-04-06"
 date: 2020-04-06T08:49:22-07:00
-draft: true
+draft: false
 ---
 
 This is my first post in a while, and unfortunately I don't have a new technical project to show off. As of writing, I've been in the COVID-19 quarantine for just over three weeks now. I'm set to finish my undergraduate degree this term, and my classes have gone entirely online, including exams.
