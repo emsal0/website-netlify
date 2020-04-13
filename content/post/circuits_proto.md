@@ -20,12 +20,12 @@ Here's an example:
 
 Note that this system can also be solved by the matrix equation
 
-$$ \begin{bmatrix} 
+\[ \begin{bmatrix} 
 1 & 0 & 0 & 0 \\\\
 -1/R_1 & 1/R_1 + 1/R_3 + 1/R_2 & -1/R_3 & -1/R_2 \\\\
 0 & -1/R_3 & 1/R_3 + 1/R_4 & -1/R_4 \\\\
 0 & 0 & 0 & 1 \\\\
-\end{bmatrix} \begin{bmatrix} V_s \\\\ V_1 \\\\ V_2 \\\\ V_{\text{GND}} \end{bmatrix} = \begin{bmatrix} V_s \\\\ 0 \\\\ 0 \\\\ 0 \end{bmatrix} $$
+\end{bmatrix} \begin{bmatrix} V_s \\\\ V_1 \\\\ V_2 \\\\ V_{\text{GND}} \end{bmatrix} = \begin{bmatrix} V_s \\\\ 0 \\\\ 0 \\\\ 0 \end{bmatrix} \]
 
 There's a bit of abuse of notation here with \\( V_s \\) referring both to the variable corresponding to the voltage level at the voltage source, and the value of the voltage it adds.
 
