@@ -86,30 +86,30 @@ def get_follow_list(username, your_username, password):
 <p>I did all of the clustering in Julia, not Python, because it's something that I've grown familiar with since starting my school's machine learning class and have started really admiring because of its surprising ease of use at its performance point. I encourage everyone with even a passing interest in scientific computing to try and learn it, it really has been fun so far.</p>
 <p>We eventually need to get to the matrix representation of our data that I was describing earlier. I did this very messily and without much consideration for performance beyond basic common sense, so bear with me.</p>
 <p>The following code reads all the followed accounts from the files and loads them into a dictionary. The keys of this dictionary are the followed accounts, and the values are all the accounts of interest that follow them.</p>
-<!-- HTML generated using hilite.me -->
-<div style="background: #f8f8f8; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;">
-<pre style="margin: 0; line-height: 125%">followed <span style="color: #666666">=</span> Dict()
+
+```julia
+followed = Dict()
 
 mutable struct FollowedAccount
-    numFollowing::<span style="color: #B00040">Int</span>
+    numFollowing::Int
     following::Array{String}
-<span style="color: #008000; font-weight: bold">end</span>
+end
 
-<span style="color: #008000; font-weight: bold">for</span> (n, file) <span style="color: #008000; font-weight: bold">in</span> enumerate(validFiles)
-    strm <span style="color: #666666">=</span> open(file, <span style="color: #BA2121">&quot;r&quot;</span>)
-    followedAccs <span style="color: #666666">=</span> readlines(strm)
-    <span style="color: #008000; font-weight: bold">for</span> acc <span style="color: #008000; font-weight: bold">in</span> followedAccs
-        <span style="color: #008000; font-weight: bold">if</span> haskey(followed, acc)
-            followed[acc]<span style="color: #666666">.</span>numFollowing <span style="color: #666666">+=</span> <span style="color: #666666">1</span>
-            push<span style="color: #666666">!</span>(followed[acc]<span style="color: #666666">.</span>following, usernames[n])
-        <span style="color: #008000; font-weight: bold">else</span>
-            followed[acc] <span style="color: #666666">=</span> FollowedAccount(<span style="color: #666666">1</span>, [usernames[n]])
-        <span style="color: #008000; font-weight: bold">end</span>
-    <span style="color: #008000; font-weight: bold">end</span>
+for (n, file) in enumerate(validFiles)
+    strm = open(file, "r")
+    followedAccs = readlines(strm)
+    for acc in followedAccs
+        if haskey(followed, acc)
+            followed[acc].numFollowing += 1
+            push!(followed[acc].following, usernames[n])
+        else
+            followed[acc] = FollowedAccount(1, [usernames[n]])
+        end
+    end
     close(strm)
-<span style="color: #008000; font-weight: bold">end</span>
-</pre>
-</div>
+end
+```
+
 <p>So, in <code>followed</code>, we now have a dictionary where we can find all the users following a particular account. We construct the data matrix by first initializing an <span class="math inline">\(n \times m\)</span> matrix of <span class="math inline">\(0\)</span>s and filling the cell in the <span class="math inline">\(i\)</span>th row and the <span class="math inline">\(j\)</span>th column with a <span class="math inline">\(1\)</span> if account of interest <span class="math inline">\(i\)</span> follows account-to-examine <span class="math inline">\(j\)</span>.</p>
 <!-- HTML generated using hilite.me -->
 {{< highlight julia >}}
@@ -146,113 +146,114 @@ ExpandCluster(p):
     For every unlabelled point within RADIUS of p:
         call ExpandCluster around those points</code></pre>
 <p>Here's the actual implementation:</p>
-<!-- HTML generated using hilite.me -->
-<div style="background: #f8f8f8; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;">
-<pre style="margin: 0; line-height: 125%"><span style="color: #008000; font-weight: bold">function</span><span style="color: #0000FF"> densityCluster</span>(dataPoints)
-    n <span style="color: #666666">=</span> size(dataPoints, <span style="color: #666666">1</span>)
 
-    MINPTS <span style="color: #666666">=</span> <span style="color: #666666">5</span>
-    RADIUS <span style="color: #666666">=</span> sqrt(n <span style="color: #666666">*</span> <span style="color: #666666">3</span> <span style="color: #666666">/</span> <span style="color: #666666">10</span>)
+```julia
+function densityCluster(dataPoints)
+    n = size(dataPoints, 1)
 
-    y <span style="color: #666666">=</span> zeros(n)
+    MINPTS = 5
+    RADIUS = sqrt(n * 3 / 10)
 
-    currentClusterNum <span style="color: #666666">=</span> <span style="color: #666666">1</span>
+    y = zeros(n)
 
-    <span style="color: #008000; font-weight: bold">for</span> i <span style="color: #008000; font-weight: bold">in</span> <span style="color: #666666">1</span>:n
-        <span style="color: #008000; font-weight: bold">if</span> y[i] <span style="color: #666666">!=</span> <span style="color: #666666">0</span>
-            <span style="color: #008000; font-weight: bold">continue</span>
-        <span style="color: #008000; font-weight: bold">end</span>
+    currentClusterNum = 1
 
-        distances<span style="color: #666666">=</span>[]
-        <span style="color: #008000; font-weight: bold">for</span> j <span style="color: #008000; font-weight: bold">in</span> <span style="color: #666666">1</span>:n
-            <span style="color: #008000; font-weight: bold">if</span> i <span style="color: #666666">!==</span> j
-                push<span style="color: #666666">!</span>(distances, norm(dataPoints[j, :] <span style="color: #666666">-</span> dataPoints[i, :]))
-            <span style="color: #008000; font-weight: bold">end</span>
-        <span style="color: #008000; font-weight: bold">end</span>
+    for i in 1:n
+        if y[i] != 0
+            continue
+        end
 
-        <span style="color: #008000; font-weight: bold">if</span> sort(distances)[MINPTS] <span style="color: #666666">&lt;=</span> RADIUS
-            println(<span style="color: #BA2121">&quot;calling expandCluster on point &quot;</span>, i)
-            currentClusterNum <span style="color: #666666">=</span> expandCluster<span style="color: #666666">!</span>(y, dataPoints, i, currentClusterNum, RADIUS, MINPTS)
-        <span style="color: #008000; font-weight: bold">end</span>
-    <span style="color: #008000; font-weight: bold">end</span>
+        distances=[]
+        for j in 1:n
+            if i !== j
+                push!(distances, norm(dataPoints[j, :] - dataPoints[i, :]))
+            end
+        end
 
-    <span style="color: #008000; font-weight: bold">return</span> y
-<span style="color: #008000; font-weight: bold">end</span>
+        if sort(distances)[MINPTS] <= RADIUS
+            println("calling expandCluster on point ", i)
+            currentClusterNum = expandCluster!(y, dataPoints, i, currentClusterNum, RADIUS, MINPTS)
+        end
+    end
 
-<span style="color: #008000; font-weight: bold">function</span><span style="color: #0000FF"> expandCluster</span><span style="color: #666666">!</span>(y, dataPoints, idx, currentClusterNum, radius, minPts)
+    return y
+end
 
-    queue <span style="color: #666666">=</span> [idx]
+function expandCluster!(y, dataPoints, idx, currentClusterNum, radius, minPts)
 
-    visited <span style="color: #666666">=</span> Set()
+    queue = [idx]
 
-    n <span style="color: #666666">=</span> size(dataPoints, <span style="color: #666666">1</span>)
+    visited = Set()
 
-    count <span style="color: #666666">=</span> <span style="color: #666666">0</span>
+    n = size(dataPoints, 1)
 
-    <span style="color: #008000; font-weight: bold">for</span> o <span style="color: #008000; font-weight: bold">in</span> queue
-        <span style="color: #008000; font-weight: bold">if</span> y[o] <span style="color: #666666">==</span> <span style="color: #666666">0</span>
-            y[o] <span style="color: #666666">=</span> currentClusterNum
-            count <span style="color: #666666">+=</span> <span style="color: #666666">1</span>
-        <span style="color: #008000; font-weight: bold">else</span>
-            <span style="color: #008000; font-weight: bold">continue</span>
-        <span style="color: #008000; font-weight: bold">end</span>
+    count = 0
 
-        (sortedPoints, distances, perm) <span style="color: #666666">=</span> closestPoints(dataPoints, idx, n<span style="color: #666666">-1</span>)
+    for o in queue
+        if y[o] == 0
+            y[o] = currentClusterNum
+            count += 1
+        else
+            continue
+        end
 
-        <span style="color: #008000; font-weight: bold">for</span> j <span style="color: #008000; font-weight: bold">in</span> <span style="color: #666666">1</span>:n
-            <span style="color: #008000; font-weight: bold">if</span> distances[j] <span style="color: #666666">&lt;=</span> radius <span style="color: #666666">&amp;&amp;</span> y[perm[j]] <span style="color: #666666">==</span> <span style="color: #666666">0</span>
-                push<span style="color: #666666">!</span>(queue, perm[j])
-                push<span style="color: #666666">!</span>(visited, perm[j])
-            <span style="color: #008000; font-weight: bold">end</span>
-        <span style="color: #008000; font-weight: bold">end</span>
-    <span style="color: #008000; font-weight: bold">end</span>
+        (sortedPoints, distances, perm) = closestPoints(dataPoints, idx, n-1)
 
-    <span style="color: #008000; font-weight: bold">if</span> count <span style="color: #666666">&lt;</span> minPts
-        <span style="color: #008000; font-weight: bold">for</span> pt <span style="color: #008000; font-weight: bold">in</span> visited
-            y[pt] <span style="color: #666666">=</span> <span style="color: #666666">0</span>
-        <span style="color: #008000; font-weight: bold">end</span>
-        <span style="color: #008000; font-weight: bold">return</span> currentClusterNum
-    <span style="color: #008000; font-weight: bold">end</span>
+        for j in 1:n
+            if distances[j] <= radius && y[perm[j]] == 0
+                push!(queue, perm[j])
+                push!(visited, perm[j])
+            end
+        end
+    end
 
-    <span style="color: #008000; font-weight: bold">return</span> currentClusterNum <span style="color: #666666">+</span> <span style="color: #666666">1</span>
-<span style="color: #008000; font-weight: bold">end</span>
-</pre>
-</div>
+    if count < minPts
+        for pt in visited
+            y[pt] = 0
+        end
+        return currentClusterNum
+    end
+
+    return currentClusterNum + 1
+end
+```
+
 <p>Of central importance to the <code>DBSCAN</code> algorithm is the notion of getting the closest points to a particular point, in order. It takes <span class="math inline">\(O(nd)\)</span> time to find these closest points (in my implementation I just call <code>sort</code> instead of just keeping track of the smallest points so I believe mine might actually be <span class="math inline">\(O(dn\log n)\)</span>). There's definitely been some fantastic work in data structures and algorithms that use approximations or other clever workings to make finding closest points faster, which is vital when your dataset is huge (which is the case for things like the datasets at large software companies). In any case, here's my implementation of <code>closestPoints</code>, which may cause you to cringe:</p>
 <!-- HTML generated using hilite.me -->
-<div style="background: #f8f8f8; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;">
-<pre style="margin: 0; line-height: 125%"><span style="color: #008000; font-weight: bold">function</span><span style="color: #0000FF"> closestPoints</span>(X::Array{<span style="color: #B00040">Float64</span>, <span style="color: #666666">2</span>}, i, numPoints)
 
-    n <span style="color: #666666">=</span> size(X, <span style="color: #666666">1</span>)
+```julia
+function closestPoints(X::Array{Float64, 2}, i, numPoints)
 
-    distances<span style="color: #666666">=</span>[]
-    <span style="color: #008000; font-weight: bold">for</span> j <span style="color: #008000; font-weight: bold">in</span> <span style="color: #666666">1</span>:n
-        push<span style="color: #666666">!</span>(distances, norm(dataPoints[j, :] <span style="color: #666666">-</span> dataPoints[i, :]))
-    <span style="color: #008000; font-weight: bold">end</span>
+    n = size(X, 1)
 
-    <span style="color: #008000; font-weight: bold">return</span> X[sortperm(distances)[<span style="color: #666666">1</span>:numPoints], :], distances, sortperm(distances)
-<span style="color: #008000; font-weight: bold">end</span>
-</pre>
-</div>
+    distances=[]
+    for j in 1:n
+        push!(distances, norm(dataPoints[j, :] - dataPoints[i, :]))
+    end
+
+    return X[sortperm(distances)[1:numPoints], :], distances, sortperm(distances)
+end
+```
+
 <h2 id="the-curse-of-dimensionality">The Curse of Dimensionality</h2>
 <p>The DBSCAN algorithm is great, but it's sensitive to the choices of the two parameters <code>MINPTS</code> and <code>RADIUS</code>. I'm actually still trying to select the best choices for those two parameters, which can be difficult since it's hard to judge the output of the algorithm. Furthermore, like any data analysis algorithm, it won't produce any meaningful data if the data is unusable for whatever reason.</p>
 <p>In this case, if I just ran DBSCAN on the matrix form of the data I collected from my Twitter follow list, it would <strong>be unlikely to produce any useful output</strong>. This is because of a problem known as <a href="https://en.wikipedia.org/wiki/Curse_of_dimensionality">the Curse of Dimensionality</a>. DBSCAN is a spatial clustering algorithm, which depends on dense clusters existing in the space you're exploring. Since the space we're exploring has a number of dimensions (<span class="math inline">\(m\)</span>) that is much, much higher than the number of data points (<span class="math inline">\(n\)</span>), the points are in general too distant to find any sort of dense regions at all.</p>
 <p>To deal with this, I have to reduce the dimensions (the number of columns) of the matrix. The algorithm that I used for this is called <a href="https://en.wikipedia.org/wiki/Principal_component_analysis">principal component analysis</a>, or PCA. It does what the name suggests, figuring out the most principal components, the &quot;most important&quot; features, and reducing the dimensionality by transforming the matrix so that only the columns corresponding to those principal components are left.</p>
 <p>I very naively use this algorithm without fully understanding details of how it works (I'll gain some understanding soon, though, and maybe write a post about it!), inputting a target dimensionality I want to achieve and just throwing PCA at my function. The specific library I used was <a href="https://github.com/JuliaStats/MultivariateStats.jl">MultivariateStats.jl</a>.</p>
 <p>I have about 300 accounts of interest, so I reduce the dimensionality of the matrix from some number much greater than 300 to something decently below 300, like 40. I also experimented with standardizing each of the data points so that they're generally closer together.</p>
-<!-- HTML generated using hilite.me -->
-<div style="background: #f8f8f8; overflow:auto;width:auto;border:solid gray;border-width:.1em .1em .1em .8em;padding:.2em .6em;">
-<pre style="margin: 0; line-height: 125%"><span style="color: #008000; font-weight: bold">function</span><span style="color: #0000FF"> rescale</span>(A, dim::Integer<span style="color: #666666">=1</span>)
-    res <span style="color: #666666">=</span> A <span style="color: #666666">.-</span> mean(A, dim)
-    res <span style="color: #666666">./=</span> map<span style="color: #666666">!</span>(x <span style="color: #666666">-&gt;</span> x <span style="color: #666666">&gt;</span> <span style="color: #666666">0.0</span> <span style="color: #666666">?</span> x : <span style="color: #666666">1.0</span>, std(A, dim))
-    <span style="color: #008000; font-weight: bold">return</span> res
-<span style="color: #008000; font-weight: bold">end</span>
 
-reshapedData <span style="color: #666666">=</span> <span style="color: #008000">convert</span>(Matrix{<span style="color: #B00040">Float64</span>}, dataPoints)
-X <span style="color: #666666">=</span> rescale(reshapedData, <span style="color: #666666">1</span>)
-M <span style="color: #666666">=</span> fit(PCA, X<span style="color: #666666">&#39;</span>; maxoutdim <span style="color: #666666">=</span> <span style="color: #666666">40</span>)
-</pre>
-</div>
+```julia
+function rescale(A, dim::Integer=1)
+    res = A .- mean(A, dim)
+    res ./= map!(x -> x > 0.0 ? x : 1.0, std(A, dim))
+    return res
+end
+
+reshapedData = convert(Matrix{Float64}, dataPoints)
+X = rescale(reshapedData, 1)
+M = fit(PCA, X'; maxoutdim = reduce_dim)
+```
+
 <p>So now, instead of a <span class="math inline">\(n \times m\)</span> matrix I now have an <span class="math inline">\(n \times 40\)</span> matrix, and since my <span class="math inline">\(n\)</span> is significantly greater than 40, I can do the DBSCAN on it without running into the Curse. I'm not totally sure if doing clustering on the output of PCA is entirely appropriate but with this particular set of parameters, I'm able to gain results that verge on the passable.</p>
 <h2 id="struggles-and-things-i-tried-that-didnt-make-the-cut">Struggles, and things I tried that didn't make the cut</h2>
 <p>The most difficult part of this experiment was being able to code a correct <code>expandCluster</code> function. At first, my algorithm was placing almost every data point in a single cluster. After much inspection of my code (with a regrettable lack of unit testing which I aim to fix sooner or later), I noticed that the algorithm wasn't handling the case where there were reachable points, but they were all already assigned to a cluster. I definitely had to rewrite the basic iteration through the queue a bunch of times.</p>
