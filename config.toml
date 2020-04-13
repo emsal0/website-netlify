@@ -33,6 +33,11 @@ languageCode = "en"
   post = "/:year/:month/:slug/"
 
 [markup]
+  [markup.blackFriday]
+    skipHTML = false
+  [markup.goldmark]
+    [markup.goldmark.renderer]
+      unsafe = true
   [markup.highlight]
     codeFences = true
     guessSyntax = false
