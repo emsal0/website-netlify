@@ -138,11 +138,11 @@ register_node!(c2, "n1", VoltageSource(12.0))
 register_node!(c2, "n2", BaseNode())
 register_node!(c2, "n3", BaseNode())
 connect_nodes!(c2, "n1", "n2", Resistor(4000.))
-connect_nodes!(c2, "n1", "n3", Resistor(2000.))
+connect_nodes!(c2, "n2", "n3", Resistor(2000.))
 connect_nodes!(c2, "n2", "GND", Resistor(1000.))
 connect_nodes!(c2, "n3", "GND", Resistor(2000.))
 println(solve_voltages(c2))
-#output: [12; 6.0; 2.4; 0]
+#output: [12; 2.0; 1.0; 0]
 ```
 
 So that's where I'm at so far! There are some pretty natural extensions to what I've done so far:
