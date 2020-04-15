@@ -19,16 +19,16 @@ aliases:
 <h2 id="the-simplest-aim-data-representation-of-a-twitter-account">The simplest aim: data representation of a Twitter account</h2>
 <p>To set up the clustering, there has to be a way to represent each twitter account in my follow list in some form that can be analyzed. For this project, I decided to identify a Twitter account purely by the other accounts that they follow. I represent this in a vector representation that is just like a row of an adjacency matrix for a graph. This graph has a &quot;central&quot; account, and we build up the graph based on who that central account follows -- these are what we'll call the <em>accounts of interest</em>. These accounts of interest each follow other accounts (including some of each other), and we're interested in these accounts, too — we'll call these the <em>accounts to examine</em>.</p>
 <div class="figure">
-<img src="https://i.imgur.com/3r2YdWW.png" />
+<img class="transp" src="https://i.imgur.com/3r2YdWW.png" />
 
 </div>
 <div class="figure">
-<img src="https://i.imgur.com/pQTQKgT.png" />
+<img class="transp" src="https://i.imgur.com/pQTQKgT.png" />
 
 </div>
 <p>If we take all the accounts that all our accounts of interest follow and deduplicate them, we have a set of nodes of size <span class="math inline">\(m\)</span>. If we take following as a (directional) edge between two nodes, we can represent a twitter account as a vector, the size of it being <span class="math inline">\(m\)</span> by <span class="math inline">\(1\)</span>. If we have <span class="math inline">\(n\)</span> accounts of interest, then our data is represented in the form of an <span class="math inline">\(n \times m\)</span> matrix. If account of interest <span class="math inline">\(i\)</span> follows account to examine <span class="math inline">\(j\)</span>, the cell in the <span class="math inline">\(i\)</span>th row and the <span class="math inline">\(j\)</span>th column will be a <span class="math inline">\(1\)</span>, otherwise it'll be <span class="math inline">\(0\)</span>. It's worth noting that, in almost all cases, <span class="math inline">\(m\)</span> will be much larger than <span class="math inline">\(n\)</span>, which is a serious, almost existential problem to this project that I will go into more detail about later in the post.</p>
 <div class="figure">
-<img src="https://i.imgur.com/GNge932.png" width="900" />
+<img class="transp" src="https://i.imgur.com/GNge932.png" width="900" />
 
 </div>
 <h2 id="collecting-the-data">Collecting the data</h2>
