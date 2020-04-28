@@ -4,7 +4,7 @@ date: 2020-04-27T06:29:02-07:00
 draft: false
 ---
 
-This past week I tried my hand at the [Titanic Kaggle competition](https://www.kaggle.com/c/titanic/). The goal of this contest is to predict whether a given passenger on the _Titanic_ survived the disaster based on data collected about the attributes of passengers.
+This past week I tried my hand at the [Titanic Kaggle competition](https://www.kaggle.com/c/titanic/). The goal of this contest is to predict whether a given passenger on the _Titanic_ survived the disaster based on data collected about the attributes of passengers. Here I'll be writing some of my reflections on my experience for those in a similar situation; doing this has made me realize that ML sometimes has some pretty strange nuances.
 
 Even though I've spent a lot of time studying machine learning and statistics throughout my degree, I've only had a tiny amount of experience doing Kaggle competitions. In doing this one, I feel like I've managed to find a work process and compare different models to each other that's worked somewhat well, and in coming up with it I didn't need to use a tutorial or even any sort of recommendation as to what model to use. I just had the `scikit-learn` and `pandas` documentation and the data itself. As of now, I'm not incredibly high on the leaderboard yet, but coming up with this process was in and of itself quite rewarding for me as I've finally had the time to apply in practice a lot of what I've learned in theory.
 
