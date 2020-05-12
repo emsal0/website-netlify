@@ -26,7 +26,7 @@ When I saw these for the first time it was tough for me to connect the semantics
 
 * For i.o.: I like to see this as the union of all \\( A_n \\) with things sheared off from it as the outer intersection works its course. This outer intersection goes to infinity; all elements in \\( A_n \text{ i.o.} \\) are in every single union \\( \bigcup_{k=n}^{\infty} A_k, \forall n \\) (in the same vein as the above call these \\( C_n \\)). As we're thinking of things being sheared off, the intuition here is to think of the things that are absent from the set: if, at any point, an element \\( e \\) ceases to be present in a \\( C_n \\), then it cannot be in the whole intersection (by the way that our unions work, if \\(e \notin C_n \\) then \\(e \notin C_m \forall m \ge n \\)). What worked for me at this point was to think of \\( A_n \text{ i.o.} \\) as all elements \\( e \\) for which, \\( \forall N \in \mathbb{N}, \exists n \ge N, e \\in A_n \\) &mdash; if you "look past" any particular \\( N \\), one of the sets that exist past that point is bound to contain the element \\( e \\).
 
-* Analogous to how the limsup is greater than the liminf for a sequence of numbers, \\( A_n \text{ i.o.} \supseteq A_n \text{ a.a.} \\).
+* Analogous to how the limsup is greater than or equal to the liminf for a sequence of numbers, \\( A_n \text{ i.o.} \supseteq A_n \text{ a.a.} \\).
 
 Hopefully this was informative! I originally tried to make a visual explanation but it got messy and sort of failed:
 
