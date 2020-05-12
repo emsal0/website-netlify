@@ -1,7 +1,7 @@
 ---
 title: "Logs 2020-05-11: Sequences of Sets"
 date: 2020-05-11T17:49:22-07:00
-draft: true
+draft: false
 ---
 
 Here's a quick little math one.
