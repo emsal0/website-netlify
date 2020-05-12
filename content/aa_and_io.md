@@ -28,8 +28,6 @@ When I saw these for the first time it was tough for me to connect the semantics
 
 * Analogous to how the limsup is greater than the liminf for a sequence of numbers, \\( A_n \text{ i.o.} \supseteq A_n \text{ a.a.} \\).
 
-<!--more-->
-
 Hopefully this was informative! I originally tried to make a visual explanation but it got messy and sort of failed:
 
 
