@@ -1,7 +1,7 @@
 ---
 title: "Trying to understand social media addiction"
 date: 2020-05-16T15:11:31-07:00
-draft: true
+draft: false
 ---
 
 I've spent a little bit of time combing through research papers about social media, mostly by using Google Scholar. I didn't have a particular goal in mind when setting out on this exploration, but I was primarily interested in the links between social media usage and mental health, as well as the analysis of social media addiction (how prevalent it is, its forms, patterns that differ among cultures and are common along cultural lines, etc). As the introduction of mobile phones and social media have essentially changed the way we communicate, research into analyzing its effects on people is in no short supply.
