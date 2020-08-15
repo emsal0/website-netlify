@@ -20,7 +20,6 @@ languageCode = "en"
 [params.author]
   name = "emsal"
   gravatar = "emsal1863@gmail.com"
-  twitter = "emsal1863"
   github = "emsal1863"
   email = "emsal1863@gmail.com"
 
