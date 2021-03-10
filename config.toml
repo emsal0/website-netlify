@@ -49,11 +49,11 @@ languageCode = "en"
     tabWidth = 4
 
 # Header Menu
-[[menu.main]]
-  name = "Tags"
-  identifier = "tags"
-  url = "/tags/"
-  weight = 2
+# [[menu.main]]
+#   name = "Tags"
+#   identifier = "tags"
+#   url = "/tags/"
+#   weight = 2
 [[menu.main]]
   name = "About"
   identifier = "about"
