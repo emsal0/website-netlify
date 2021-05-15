@@ -1,5 +1,5 @@
 ---
-title: "School Projects 1: Direction of Voice Filter"
+title: "MSc Course Projects 1: Direction of Voice Filter"
 date: 2021-05-14T19:45:23-07:00
 draft: false
 ---
