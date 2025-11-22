@@ -3,7 +3,9 @@ title: "About"
 draft: false
 ---
 
-I'm Emmanuel, a Computer Science MSc student at the University of British Columbia and a software developer.
+I'm Emmanuel, a software engineer at Google.
+
+I'm a proud and happy alum of the University of British Columbia, where I studied my bachelor's (in computer science and statistics) and master's degrees (in computer science, with a research focus on machine learning theory).
 
 [Resume](/resume.pdf)
 
